@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Tab</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="topbar" class="mono">
+  <div class="tbox" id="gear"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg></div>
+  <div class="tbox" id="mystery"><i></i></div>
+  <div class="tbox" id="greet">Hello, Ri</div>
+  <div class="tbox" id="nowplaying">&#9834; Now playing &#9834; nothing yet</div>
+</div>
+
+<div class="layout">
+
+  <div class="card" id="playerCard">
+    <div id="art">&#9834;</div>
+    <div id="songT">Pick a song</div>
+    <div id="songA">from the tracklist</div>
+    <div id="pbar"><div id="pfill"></div></div>
+    <div class="ctrls">
+      <button id="prevBtn">&#9198;</button>
+      <button id="playBtn">&#9654;</button>
+      <button id="nextBtn">&#9197;</button>
+    </div>
+    <div id="playHint"></div>
+    <h3>Tracklist</h3>
+    <ul id="tracks"></ul>
+  </div>
+
+  <div id="center">
+    <div id="clock">--:--</div>
+    <div id="date"></div>
+    <form id="search"><input id="q" type="text" placeholder="search here!" autocomplete="off" autofocus><span><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></form>
+    <nav id="marks"></nav>
+    <div class="card" id="newsCard">
+      <h3 id="newsTitle">News</h3>
+      <ul id="newsList"><li style="color:var(--mut);font-size:13px;padding:8px 2px;">loading headlines...</li></ul>
+    </div>
+  </div>
+
+  <div class="rightcol">
+    <div class="card">
+      <h3>Weather</h3>
+      <div id="wTemp">--&deg;</div>
+      <div id="wDesc">loading...</div>
+      <div id="wLoc">locating...</div>
+    </div>
+    <div class="card">
+      <div id="calHead"><button id="calPrev">&#8249;</button><b id="calTitle"></b><button id="calNext">&#8250;</button></div>
+      <div id="calGrid"></div>
+    </div>
+    <div class="card" id="pongCard">
+      <h3>Pong</h3>
+      <canvas id="pong"></canvas>
+      <div id="pongScore">0 : 0</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="foot">made by Ri, ri-buni</div>
+
+<div id="modal"><div class="box">
+  <h3>Settings</h3>
+  <input id="nameInput" type="text" placeholder="Your name">
+  <label><input type="checkbox" id="darkToggle"> Dark theme</label>
+  <button id="saveName">Save</button>
+</div></div>
+
+<script>
+'use strict';
+var store={
+ get:function(k,f){try{var v=localStorage.getItem(k);return v?JSON.parse(v):f;}catch(e){return f;}},
+ set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
+function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function applyTheme(){document.body.classList.toggle('dark',store.get('nt_dark',false));}
+applyTheme();
+
+var greetEl=document.getElementById('greet');
+function setGreet(){greetEl.textContent='Hello, '+store.get('nt_name','Ri');}
+setGreet();
+var modal=document.getElementById('modal');
+document.getElementById('gear').onclick=function(){
+ document.getElementById('nameInput').value=store.get('nt_name','Ri');
+ document.getElementById('darkToggle').checked=store.get('nt_dark',false);
+ modal.classList.add('open');
+};
+document.getElementById('darkToggle').onchange=function(){
+ store.set('nt_dark',this.checked);applyTheme();
+};
+document.getElementById('saveName').onclick=function(){
+ var v=document.getElementById('nameInput').value.trim();
+ if(v)store.set('nt_name',v);
+ setGreet();modal.classList.remove('open');
+};
+modal.onclick=function(e){if(e.target===modal)modal.classList.remove('open');};
+
+var honk=new Audio('FNAF_Honk_-_QuickSounds_com.mp3');
+honk.preload='auto';
+honk.volume=1;
+document.getElementById('mystery').onclick=function(){
+ honk.currentTime=0;
+ var p=honk.play();
+ if(p&&p.catch)p.catch(function(){
+  document.getElementById('nowplaying').textContent='honk mp3 not found, check the file name';
+ });
+};
+
+var clockEl=document.getElementById('clock'),dateEl=document.getElementById('date');
+function tick(){
+ var n=new Date();
+ clockEl.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+ dateEl.textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+tick();setInterval(tick,1000);
+
+document.getElementById('search').addEventListener('submit',function(e){
+ e.preventDefault();
+ var q=document.getElementById('q').value.trim();
+ if(q)location.href='https://www.google.com/search?q='+encodeURIComponent(q);
+});
+
+document.getElementById('marks').innerHTML=
+ '<a href="https://www.youtube.com/" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8z"/><path class="cut" d="M9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg></a>'+
+ '<a href="https://github.com/" title="GitHub"><svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>'+
+ '<a href="https://stardance.hackclub.com/" title="Stardance"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg></a>';
+
+var TRACKS=[
+ {t:'Crave You (Radio Edit)',a:'Flight Facilities',src:'songs/Flight_Facilities_feat._Giselle_-_Crave_You_Radio_Edit_(SkySound7.com).mp3',img:'crave_you.jpg'},
+ {t:'Earrings',a:'Malcolm Todd',src:'songs/earrings.mp3',img:'earrings.jpg'},
+ {t:'Garota de Ipanema',a:'Antônio Carlos Jobim',src:'songs/the girl from ipanema.mp3',img:'ipanema.jpg'},
+ {t:'Getting Over You',a:'Hot Freaks',src:'songs/Hot_Freaks_-_Hot_Freaks_-_Getting_Over_You_Official_Lyric_Video_(SkySound7.com).mp3',img:'hot_freaks.jpg'},
+ {t:'J\'comprends pas',a:'PNL',src:'songs/PNL_-_J_comprends_pas_(SkySound7.com).mp3',img:'pnl.jpg'},
+ {t:'Something About You',a:'Eyedress',src:'songs/Eyedress - She looks just like a dream (Something About You) (Lyrics) ft. Dent May.mp3',img:'eyedress.jpg'},
+ {t:'Блюз',a:'Урал Гайсин',src:'songs/Урал Гайсин - блюз (pesni.fm).mp3',img:'blues.jpg'},
+ {t:'Два дождя',a:'нежное это',src:'songs/Nezhnoe_Eto_-_Dva_dozhdya_Official_Audio_(SkySound7.com).mp3',img:'2_дождя.jpg'},
+ {t:'Август',a:'Intelligency',src:'songs/Intelligency_-_August_(SkySound7.com).mp3',img:'august.jpg'},
+ {t:'Deslocado',a:'NAPA',src:'songs/NAPA - Deslocado.mp3',img:'napa.jpg'}
+];
+var cur=-1,playing=false,audio=new Audio();
+var art=document.getElementById('art'),
+    songT=document.getElementById('songT'),songA=document.getElementById('songA'),
+    npEl=document.getElementById('nowplaying'),playBtn=document.getElementById('playBtn'),
+    pfill=document.getElementById('pfill'),hint=document.getElementById('playHint'),
+    listEl=document.getElementById('tracks');
+
+listEl.innerHTML=TRACKS.map(function(tr,i){
+ return '<li data-i="'+i+'">'+(i+1)+'. '+esc(tr.t)+' - '+esc(tr.a)+'</li>';
+}).join('');
+
+function select(i,autoplay){
+ cur=i;
+ var tr=TRACKS[i];
+ songT.textContent=tr.t;songA.textContent=tr.a;
+ art.innerHTML='&#9834;';
+ if(tr.img){
+  var im=new Image();
+  im.onload=function(){art.innerHTML='';art.appendChild(im);};
+  im.src=tr.img;
+ }
+ npEl.innerHTML='&#9834; Now playing &#9834; '+esc(tr.t)+' by '+esc(tr.a);
+ var lis=listEl.children;
+ for(var k=0;k<lis.length;k++)lis[k].classList.toggle('on',k===i);
+ audio.pause();playing=false;playBtn.innerHTML='&#9654;';pfill.style.width='0%';
+ if(tr.src){audio.src=tr.src;hint.textContent='';if(autoplay)togglePlay();}
+ else hint.textContent='no audio file linked yet (add src in TRACKS)';
+}
+function togglePlay(){
+ if(cur<0)select(0,false);
+ var tr=TRACKS[cur];
+ if(!tr.src){hint.textContent='no audio file linked yet (add src in TRACKS)';return;}
+ if(playing){audio.pause();playing=false;playBtn.innerHTML='&#9654;';}
+ else{audio.play();playing=true;playBtn.innerHTML='&#10074;&#10074;';}
+}
+playBtn.onclick=togglePlay;
+document.getElementById('nextBtn').onclick=function(){select((cur+1+TRACKS.length)%TRACKS.length,playing);};
+document.getElementById('prevBtn').onclick=function(){select((cur-1+TRACKS.length)%TRACKS.length,playing);};
+listEl.onclick=function(e){
+ var li=e.target.closest('li');
+ if(li)select(+li.dataset.i,true);
+};
+audio.addEventListener('timeupdate',function(){
+ if(audio.duration)pfill.style.width=(audio.currentTime/audio.duration*100)+'%';
+});
+audio.addEventListener('ended',function(){select((cur+1)%TRACKS.length,true);});
+
+var WMO={0:'clear sky',1:'mostly clear',2:'partly cloudy',3:'overcast',45:'foggy',48:'foggy',
+ 51:'light drizzle',53:'drizzle',55:'heavy drizzle',61:'light rain',63:'rain',65:'heavy rain',
+ 66:'freezing rain',67:'freezing rain',71:'light snow',73:'snow',75:'heavy snow',77:'snow grains',
+ 80:'light showers',81:'showers',82:'heavy showers',85:'snow showers',86:'snow showers',
+ 95:'thunderstorm',96:'thunderstorm',99:'thunderstorm'};
+function loadWeather(loc){
+ fetch('https://api.open-meteo.com/v1/forecast?latitude='+loc.lat+'&longitude='+loc.lon+'&current=temperature_2m,weather_code')
+  .then(function(r){return r.json();})
+  .then(function(d){
+   document.getElementById('wTemp').innerHTML=Math.round(d.current.temperature_2m)+'&deg;C';
+   document.getElementById('wDesc').textContent=WMO[d.current.weather_code]||'sky is doing something';
+  })
+  .catch(function(){document.getElementById('wDesc').textContent='offline';});
+}
+function loadNews(loc){
+ var cc=(loc.cc||'US').toUpperCase();
+ var feed='https://news.google.com/rss?hl=en-'+cc+'&gl='+cc+'&ceid='+cc+':en';
+ document.getElementById('newsTitle').textContent='News \u00b7 '+(loc.country||loc.city||'World');
+ fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(feed))
+  .then(function(r){if(!r.ok)throw 0;return r.text();})
+  .then(function(xml){
+   var doc=new DOMParser().parseFromString(xml,'text/xml');
+   var items=doc.querySelectorAll('item');
+   if(!items.length)throw 0;
+   var h='';
+   for(var i=0;i<Math.min(items.length,5);i++){
+    var t=items[i].querySelector('title'),l=items[i].querySelector('link');
+    if(!t||!l)continue;
+    h+='<li><a href="'+esc(l.textContent)+'">'+esc(t.textContent)+'</a></li>';
+   }
+   document.getElementById('newsList').innerHTML=h||'<li style="color:var(--mut);font-size:13px;padding:8px 2px;">no headlines found</li>';
+  })
+  .catch(function(){
+   document.getElementById('newsList').innerHTML='<li style="color:var(--mut);font-size:13px;padding:8px 2px;">couldn\'t load news (offline or feed blocked)</li>';
+  });
+}
+function useLoc(loc){
+ document.getElementById('wLoc').textContent=loc.city||'somewhere';
+ loadWeather(loc);
+ loadNews(loc);
+}
+(function locate(){
+ var c=store.get('nt_loc',null);
+ if(c&&Date.now()-c.ts<6*3600*1000){useLoc(c);return;}
+ fetch('https://ipwho.is/')
+  .then(function(r){return r.json();})
+  .then(function(d){
+   if(!d.success)throw 0;
+   var loc={lat:d.latitude,lon:d.longitude,city:d.city,country:d.country,cc:d.country_code,ts:Date.now()};
+   store.set('nt_loc',loc);
+   useLoc(loc);
+  })
+  .catch(function(){useLoc({lat:43.2389,lon:76.8897,city:'Almaty',country:'Kazakhstan',cc:'KZ',ts:Date.now()});});
+})();
+
+(function(){
+ var c=document.getElementById('pong');if(!c)return;
+ var g=c.getContext('2d');
+ var PW=6,PH=44,PAD=8,sL=0,sR=0,py=0,ay=0,ball=null;
+ function fit(){
+  c.width=c.clientWidth||240;c.height=c.clientHeight||160;
+  py=Math.max(PH/2,Math.min(c.height-PH/2,py||c.height/2));
+  ay=Math.max(PH/2,Math.min(c.height-PH/2,ay||c.height/2));
+ }
+ function reset(dir){ball={x:c.width/2,y:c.height/2,vx:dir*2.4,vy:(Math.random()*2-1)*1.8};}
+ function score(){document.getElementById('pongScore').textContent=sL+' : '+sR;}
+ c.addEventListener('mousemove',function(e){
+  var r=c.getBoundingClientRect();
+  py=(e.clientY-r.top)*(c.height/r.height);
+  py=Math.max(PH/2,Math.min(c.height-PH/2,py));
+ });
+ addEventListener('resize',fit);
+ function step(){
+  ball.x+=ball.vx;ball.y+=ball.vy;
+  if(ball.y<6||ball.y>c.height-6){ball.vy*=-1;ball.y=Math.max(6,Math.min(c.height-6,ball.y));}
+  ay+=Math.max(-2.2,Math.min(2.2,(ball.y-ay)*0.08));
+  ay=Math.max(PH/2,Math.min(c.height-PH/2,ay));
+  if(ball.vx<0&&ball.x<PAD+PW+5&&ball.x>PAD&&Math.abs(ball.y-py)<PH/2+6){
+   ball.vx=Math.min(7,Math.abs(ball.vx)*1.05);ball.vy+=(ball.y-py)*0.06;
+  }
+  if(ball.vx>0&&ball.x>c.width-PAD-PW-5&&ball.x<c.width-PAD&&Math.abs(ball.y-ay)<PH/2+6){
+   ball.vx=-Math.min(7,Math.abs(ball.vx)*1.05);ball.vy+=(ball.y-ay)*0.06;
+  }
+  ball.vy=Math.max(-5,Math.min(5,ball.vy));
+  if(ball.x<-8){sR++;score();reset(1);}
+  if(ball.x>c.width+8){sL++;score();reset(-1);}
+ }
+ function draw(){
+  var cs=getComputedStyle(document.body);
+  g.clearRect(0,0,c.width,c.height);
+  g.strokeStyle=cs.getPropertyValue('--soft');
+  g.setLineDash([4,6]);g.beginPath();g.moveTo(c.width/2,0);g.lineTo(c.width/2,c.height);g.stroke();g.setLineDash([]);
+  g.fillStyle=cs.getPropertyValue('--rose');g.fillRect(PAD,py-PH/2,PW,PH);
+  g.fillStyle=cs.getPropertyValue('--pink');g.fillRect(c.width-PAD-PW,ay-PH/2,PW,PH);
+  g.fillStyle=cs.getPropertyValue('--honey');g.beginPath();g.arc(ball.x,ball.y,5,0,Math.PI*2);g.fill();
+ }
+ function loop(){step();draw();requestAnimationFrame(loop);}
+ fit();reset(1);score();loop();
+})();
+
+var now=new Date(),viewY=now.getFullYear(),viewM=now.getMonth();
+var calTitle=document.getElementById('calTitle'),calGrid=document.getElementById('calGrid');
+var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function renderCal(){
+ calTitle.textContent=MONTHS[viewM]+' '+viewY;
+ var h='<div class="dow">Sun</div><div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div>';
+ var first=new Date(viewY,viewM,1).getDay();
+ var dim=new Date(viewY,viewM+1,0).getDate();
+ var dimPrev=new Date(viewY,viewM,0).getDate();
+ var today=new Date();
+ var cells=[];
+ for(var i=first-1;i>=0;i--)cells.push({d:dimPrev-i,dim:true});
+ for(var d=1;d<=dim;d++)cells.push({d:d,dim:false});
+ var rest=(7-cells.length%7)%7;
+ for(var r=1;r<=rest;r++)cells.push({d:r,dim:true});
+ for(var c=0;c<cells.length;c++){
+  var cell=cells[c];
+  var isToday=!cell.dim&&cell.d===today.getDate()&&viewM===today.getMonth()&&viewY===today.getFullYear();
+  h+='<div class="day'+(cell.dim?' dim':'')+(isToday?' today':'')+'">'+cell.d+'</div>';
+ }
+ calGrid.innerHTML=h;
+}
+document.getElementById('calPrev').onclick=function(){viewM--;if(viewM<0){viewM=11;viewY--;}renderCal();};
+document.getElementById('calNext').onclick=function(){viewM++;if(viewM>11){viewM=0;viewY++;}renderCal();};
+renderCal();
+</script>
+</body>
+</html>
+
+

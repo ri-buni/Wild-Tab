@@ -1,7 +1,18 @@
 # Wild-Tab
 
-A custom Tab I made for myself and people who like the Pong game. It has the Pong game (2nd most important thing), clock, weather, calendar, news, light and dark themes, my favorite songs and the 1st most important thing there - a button near settings.
+A custom Tab I made for myself.
 
-<img width="1356" height="666" alt="Screenshot (113)" src="https://github.com/user-attachments/assets/54367ce4-c59c-44e0-bc79-c89cb810934c" />
+It contains:
 
-<img width="1352" height="644" alt="Screenshot (114)" src="https://github.com/user-attachments/assets/b8a0c9a8-4d56-4d56-bf49-f3ebe1304978" />
+- A live clock + formatted date
+- Google search + icon shortcuts
+- A two-API weather bubble that auto-detects location
+- An editable name + a honk button (with painted icons)
+- A full music player - click-to-play, skip/prev, play/pause with icon swap, hover controls, album covers, auto-advance, now-playing
+- A 6-layer cursor-parallax animated wallpaper from your friend's art
+
+<img width="1361" height="637" alt="Screenshot (135)" src="https://github.com/user-attachments/assets/003cc835-6e39-4e98-a21f-40e8066ec9c0" />
+
+# Extra
+
+This is actually a 2nd version, which was rewritten from the 1st one, that you can check out too.

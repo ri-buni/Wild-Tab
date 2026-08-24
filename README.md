@@ -12,7 +12,7 @@ It contains:
 - A 6-layer cursor-parallax animated wallpaper from my friend's art
 - A custom cursor and cute boxes for player, weather and a searchbar.
 
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/a0f84ae9-bd3f-4d6c-8888-dec1b67d4c06" />
+<img width="1361" height="635" alt="Screenshot (139)" src="https://github.com/user-attachments/assets/a8bb8ff4-ac4d-4ec7-86af-170d04d2c48c" />
 
 # Extra
 

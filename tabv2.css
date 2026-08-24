@@ -1,0 +1,262 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+#topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    background: rgba(255,255,255,.5);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 14px; 
+}
+
+#name {
+    outline: none;
+    border-bottom: 1px dashed rgba(255,255,255,.5);
+}
+
+#honk {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+#honk img { 
+    width: 28px; height: 28px; 
+}
+#honk:hover { 
+    background: rgba(255,255,255,.4); 
+}
+
+#nowplaying {
+    margin-left: auto;
+    color: #ffffff
+}
+
+
+
+
+
+#clock {
+    font-size: 120px;
+    font-weight: 800;
+    color: #87A8C3;
+    letter-spacing: 0px;
+    margin-top: -40px
+
+}
+
+#weather {
+    position: fixed;
+    top: 60px;
+    right: 16px;
+    width: 400px;
+    padding: 18px;
+    text-align: center; 
+    background: url('images/weather.png') center/contain no-repeat;
+}
+
+#weather .temp {
+    display: block;
+    font-size: 42px;
+    font-weight: 800;
+    color: #87A8C3
+}
+#weather .city {
+    display: block;
+    font-size: 14px;
+    opacity: .8;
+    margin-top: 4px;
+    color: #87A8C3
+}
+
+
+
+#player {
+    position: fixed;
+    top: 60px;
+    left: 20px;
+    width: 350px;
+    background: url('images/player.png') center/contain no-repeat;
+    padding: 30px;
+    color: #fff;
+    max-height: calc(100vh - 76px);
+    display: flex;
+    flex-direction: column;
+}
+#player.playing #cover-wrap:hover #pause-btn { 
+    display: block; 
+}
+
+#cover {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    background: rgba(255,255,255,.4); 
+    object-fit: cover;
+    display: block;
+}
+#cover-wrap {
+    position: relative;
+}
+#cover-wrap:hover #pause-btn {
+    display: block;
+}
+#pause-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 46px;
+    cursor: pointer;
+    display: none;
+}
+
+#controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+.ctrl {
+    width: 22px;
+    cursor: pointer;
+}
+#next {
+    transform: scaleX(-1);
+}
+
+#song-title { 
+    text-align: center;
+    font-weight: 700;
+    margin-top: 12px;
+}
+#song-artist { 
+    text-align: center; 
+    font-size: 13px;
+    opacity: .8; 
+}
+#tracklist { 
+    list-style: none; 
+    margin-top: 14px; 
+    overflow-y: auto; 
+    flex: 1;
+}
+#tracklist li { 
+    padding: 8px 4px; font-size: 14px; cursor: pointer; border-top: 1px solid rgba(255,255,255,.2); 
+}
+#tracklist li:hover { 
+    opacity: 0.7; 
+}
+
+
+
+
+#date {
+    color: #87A8C3;
+    font-size: 20px;
+    margin-top: -30px;
+}
+
+#search {
+    position: relative;
+    width: 450px;
+}
+
+#search input {
+    width: 100%;
+    padding: 16px 44px 16px 20px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background: url('images/searchbar.png') center/contain no-repeat;
+}
+
+#search img {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+}
+
+#links {
+    display: flex;
+    gap: 14px;
+}
+#links a {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .2s;
+}
+#links a:hover {
+    transform: scale(1.1);
+}
+#links img {
+    width: 30px;
+    height: 30px;
+}
+#links img.star {
+    width: 24px;
+    height: 24px
+}
+#links img.youtube {
+    width: 28px;
+    height: 28px;
+}
+
+
+
+
+#wallpaper {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+.layer {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%; 
+    height: 110%;
+    object-fit: cover;
+    transition: transform .2s ease-out;
+}
+
+
+body {
+    font-family:"Helvetica Neue", Helvetica;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px 
+}
+
+body { 
+    cursor: url('images/cursor.png') 4 4,auto;
+}
+#search input, #name {
+    cursor: url('images/text.png') 4 12, text; 
+}
+#links a, #honk, #tracklist li, .ctrl, #pause-btn, #prev, #next {
+    cursor: url('images/cursor.png') 4 4, pointer;
+}

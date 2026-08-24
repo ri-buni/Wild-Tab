@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>WildTab</title>
+        <link rel="stylesheet" href="tabv2.css">
+    </head>
+
+    <body>
+        <div id="topbar">
+            <button id="honk"><img src="images/button.png" alt="honk"></button>
+            <span>Hello, <span id="name" contenteditable="true">Ri</span></span>
+            <span id="nowplaying">Nothing playing</span>
+        </div>
+
+        <div id="player">
+            <div id="cover-wrap">
+                <img id="cover" alt="">
+                <img id="pause-btn" src="images/pause.png" alt="pause">
+            </div>
+        <div id="controls">
+            <img class="ctrl" id="prev" src="images/arrow.png" alt="prev">
+            <div id="song-title">Pick a song</div>
+            <img class="ctrl" id="next" src="images/arrow.png" alt="next">
+        </div>
+        <div id="song-artist"></div>
+        <ul id="tracklist"></ul>
+        <audio id="audio"></audio>
+        </div>
+
+
+        <h1 id="clock">--:--</h1>
+        <p id="date">loading date...</p>   
+        <div id="weather">loading weather...</div>
+
+        <form id="search" action="https://www.google.com/search">
+            <input name="q" type="text" placeholder="Seeaarch..." autocomplete="off">
+            <img src="images/search.png" alt="search">
+        </form>
+
+        <nav id="links">
+            <a href="https://www.youtube.com/"><img class="youtube" src="images/youtube.png" alt="YouTube"></a>
+            <a href="https://github.com/"><img src="images/github.png" alt="GitHub"></a>
+            <a href="https://stardance.hackclub.com/"><img class="star" src="images/star.png" alt="Stardance"></a>
+        </nav>
+
+        <div id="wallpaper">
+            <img class="layer" data-depth="8"  src="images/buni_layer1.png" alt=""><img class="layer" data-depth="15" src="images/buni_layer2.png" alt="">
+            <img class="layer anim" data-depth="25" data-name="buni_layer3" src="images/buni_layer3_1.png" alt="">
+            <img class="layer anim" data-depth="38" data-name="buni_layer4" src="images/buni_layer4_1.png" alt="">
+            <img class="layer anim" data-depth="42" data-name="buni_layer5" src="images/buni_layer5_1.png" alt="">
+            <img class="layer anim" data-depth="45" data-name="buni_layer6" src="images/buni_layer6_1.png" alt="">
+        </div>
+
+        <script src="tabv2.js"></script>
+    </body>
+</html>
